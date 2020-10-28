@@ -64,8 +64,9 @@ public class BowlingResultsTest {
         assertEquals(expected, actual);
     }
     @Test
-    @Disabled("add tests for frame result !  avoid complexity of total score.  ")
-    void NextTopic() {
-        fail("add tests for frame result !  avoid complexity of total score.  ");
+   void  one_spare_all_misses_is_10() {
+        int expected = 10;
+        int actual = BowlingResults.answer("-/|--|--|--|--|--|--|--|--|--||");
+        assertEquals(expected, actual);
     }
 }

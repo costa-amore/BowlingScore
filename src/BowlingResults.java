@@ -1,12 +1,16 @@
 
 public class BowlingResults {
     public static int answer(String all_throws_result_list)  {
+        all_throws_result_list = all_throws_result_list.replace("-","0");
         String[] frames = all_throws_result_list.split("\\|");
 
         if (frames[0].contains("/")) {
             if (calculateFrameResult(frames, 1) == 5) {
                 return calculateFrameResult(frames, 0)
                      + calculateFrameResult(frames, 1);
+            }
+            if (calculateFrameResult(frames, 1) == 0) {
+                return calculateFrameResult(frames, 0);
             }
             return 150;
         }
@@ -27,7 +31,7 @@ public class BowlingResults {
     }
 
     private static int calculateFrameResult(String[] frames, int frameNumber) {
-        String frame = frames[frameNumber].replace("-", "0");
+        String frame = frames[frameNumber];
 
         String firstThrow = replaceStrikeWithTen(frame);
         String secondThrow = "0";
@@ -43,7 +47,7 @@ public class BowlingResults {
     }
 
     private static int firstThrowOfNextFrame(String[] frames, int frameNumber)  {
-        return 5;
+        return Integer.parseInt(getFirstThrow(frames[frameNumber]));
     }
 
     private static boolean notaStrike(String roll){
@@ -58,6 +62,9 @@ public class BowlingResults {
         return String.valueOf(frame.charAt(0)).replace("X","10");
     }
 
+    private static String getFirstThrow(String frame) {
+        return String.valueOf(frame.charAt(0));
+    }
     private static String getSecondThrow(String frame) {
         return String.valueOf(frame.charAt(1));
     }
