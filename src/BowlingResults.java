@@ -5,7 +5,7 @@ public class BowlingResults {
         String[] frames = all_throws_result_list.split("\\|");
 
         if (frames[0].contains("/")) {
-            if (calculateFrameResult(frames, 1) == 5) {
+            if (calculateFrameResult(frames, 1) < 10) {
                 return calculateFrameResult(frames, 0)
                      + calculateFrameResult(frames, 1);
             }
@@ -47,7 +47,7 @@ public class BowlingResults {
     }
 
     private static int firstThrowOfNextFrame(String[] frames, int frameNumber)  {
-        return Integer.parseInt(getFirstThrow(frames[frameNumber]));
+        return Integer.parseInt(getFirstThrow(frames[frameNumber+1]));
     }
 
     private static boolean notaStrike(String roll){

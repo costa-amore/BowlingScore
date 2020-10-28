@@ -1,12 +1,8 @@
 
 f	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ö§„ê
-P
-java:S1118":Add a private constructor to hide the implicit public one.(¢ëÄŸ
-T
-java:S3400."9Remove this method and declare a constant for this value.(àí–Ÿþÿÿÿÿ
 0
 java:S1220""Move this file to a named package.
 S
-java:S1144@"8Remove this unused private "replaceSpareWithTen" method.(«Ä’ˆýÿÿÿÿ
-A
-java:S1172-"&Remove these unused method parameters.(æÇûÈøÿÿÿÿ
+java:S1144G"8Remove this unused private "replaceSpareWithTen" method.(«Ä’ˆýÿÿÿÿ
+P
+java:S1118":Add a private constructor to hide the implicit public one.(¢ëÄŸ
