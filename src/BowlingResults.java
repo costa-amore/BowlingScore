@@ -6,29 +6,10 @@ public class BowlingResults {
 
         if (frames[0].contains("/")) {
             if (calculateFrameResult(frames, 1) < 10) {
-                return calculateFrameResult(frames, 0)
-                        + calculateFrameResult(frames, 1);
-            }
-            if (calculateFrameResult(frames, 1) == 0) {
-                return calculateFrameResult(frames, 0);
+                return sumOfAllFrames(frames);
             }
             return 150;
         }
-
-        if(frames[0].contains("X")) {
-            if(frames[1].contains("X")) {
-                return 300;
-            }
-            if(calculateFrameResult(frames, 1) == 7) {
-                return calculateFrameResult(frames, 0)
-                        + calculateFrameResult(frames, 1);
-            }
-            if(calculateFrameResult(frames, 1) == 0) {
-                return calculateFrameResult(frames, 0)
-                        + calculateFrameResult(frames, 1);
-            }
-        }
-
         return sumOfAllFrames(frames);
     }
 
@@ -44,7 +25,31 @@ public class BowlingResults {
                 return 10 + firstThrowOfNextFrame(frames, frameNumber);
             }
         } else {
-            return 10 + calculateFrameResult(frames, frameNumber +1);
+            if (frameNumber == 9) {
+                return 10 + throwsInFrame(frames, frameNumber +2);
+            }
+            if (frameNumber > 9) {
+                return 10;
+            }
+            return 10 + throwsInFrame(frames, frameNumber +1);
+        }
+
+        return sumOfTwoThrows(firstThrow, secondThrow);
+    }
+
+    private static int throwsInFrame(String[] frames, int frameNumber) {
+        String frame = frames[frameNumber];
+
+        String firstThrow = replaceStrikeWithTen(frame);
+        String secondThrow = "0";
+
+        if (notaStrike(firstThrow)) {
+            secondThrow = getSecondThrow(frame);
+            if (isASpare(secondThrow)){
+                return 10;
+            }
+        } else {
+            return 10;
         }
 
         return sumOfTwoThrows(firstThrow, secondThrow);
