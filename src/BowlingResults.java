@@ -7,7 +7,7 @@ public class BowlingResults {
         if (frames[0].contains("/")) {
             if (calculateFrameResult(frames, 1) < 10) {
                 return calculateFrameResult(frames, 0)
-                     + calculateFrameResult(frames, 1);
+                        + calculateFrameResult(frames, 1);
             }
             if (calculateFrameResult(frames, 1) == 0) {
                 return calculateFrameResult(frames, 0);
@@ -85,5 +85,7 @@ public class BowlingResults {
 
         return sumOfFrames;
     }
+
+
 
 }

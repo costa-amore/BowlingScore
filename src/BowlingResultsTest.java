@@ -91,10 +91,10 @@ public class BowlingResultsTest {
         assertEquals(expected, actual);
     }
     @Test
-    @Disabled ("next step in our weekly mob")
-    void one_strike_frameTwo_has_value_three_followed_by_all_misses_is_22() {
-        int expected = 10;
-        int actual = BowlingResults.answer("X|33|--|--|--|--|--|--|--|--||");
+    @Disabled( "need refactoring first")
+    void one_strike_frameTwo_has_value_three_followed_by_all_misses_is_16() {
+        int expected = 16;
+        int actual = BowlingResults.answer("X|3-|--|--|--|--|--|--|--|--||");
         assertEquals(expected, actual);
     }
 
