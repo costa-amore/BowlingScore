@@ -92,7 +92,7 @@ public class BowlingResultsTest {
     }
     @Test
     @Disabled ("next step in our weekly mob")
-    void one_strike_fremeTwo_has_value_three_followed_by_all_misses_is_22() {
+    void one_strike_frameTwo_has_value_three_followed_by_all_misses_is_22() {
         int expected = 10;
         int actual = BowlingResults.answer("X|33|--|--|--|--|--|--|--|--||");
         assertEquals(expected, actual);
