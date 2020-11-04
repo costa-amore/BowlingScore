@@ -16,14 +16,16 @@ public class BowlingResults {
         }
 
         if(frames[0].contains("X")) {
-            if(calculateFrameResult(frames, 1) == 7) {
-                return 24;
-            }
-            if(calculateFrameResult(frames, 1) == 0) {
-                return 10;
-            }
             if(frames[1].contains("X")) {
                 return 300;
+            }
+            if(calculateFrameResult(frames, 1) == 7) {
+                return calculateFrameResult(frames, 0)
+                        + calculateFrameResult(frames, 1);
+            }
+            if(calculateFrameResult(frames, 1) == 0) {
+                return calculateFrameResult(frames, 0)
+                        + calculateFrameResult(frames, 1);
             }
         }
 
@@ -41,6 +43,8 @@ public class BowlingResults {
             if (isASpare(secondThrow)){
                 return 10 + firstThrowOfNextFrame(frames, frameNumber);
             }
+        } else {
+            return 10 + calculateFrameResult(frames, frameNumber +1);
         }
 
         return sumOfTwoThrows(firstThrow, secondThrow);
