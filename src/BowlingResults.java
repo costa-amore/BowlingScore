@@ -14,42 +14,46 @@ public class BowlingResults {
     }
 
     private static int calculateFrameResult(String[] frames, int frameNumber) {
-        String frame = frames[frameNumber];
+        String currentFrame = frames[frameNumber];
 
-        String firstThrow = replaceStrikeWithTen(frame);
+        String firstThrow = replaceStrikeWithTen(currentFrame);
         String secondThrow = "0";
 
         if (notaStrike(firstThrow)) {
-            secondThrow = getSecondThrow(frame);
+            secondThrow = getSecondThrow(currentFrame);
             if (isASpare(secondThrow)){
                 return 10 + firstThrowOfNextFrame(frames, frameNumber);
             }
         } else {
             if (frameNumber == 9) {
-                return 10 + throwsInFrame(frames, frameNumber +2);
+                return 10 + sumofNextTwoThrows(frames, frameNumber +2);
             }
             if (frameNumber > 9) {
                 return 10;
             }
-            return 10 + throwsInFrame(frames, frameNumber +1);
+            return 10 + sumofNextTwoThrows(frames, frameNumber +1);
         }
 
         return sumOfTwoThrows(firstThrow, secondThrow);
     }
 
-    private static int throwsInFrame(String[] frames, int frameNumber) {
-        String frame = frames[frameNumber];
+    private static int sumofNextTwoThrows(String[] frames, int frameNumber) {
+        String currentFrame = frames[frameNumber];
 
-        String firstThrow = replaceStrikeWithTen(frame);
+        String firstThrow = replaceStrikeWithTen(currentFrame);
         String secondThrow = "0";
 
         if (notaStrike(firstThrow)) {
-            secondThrow = getSecondThrow(frame);
+            secondThrow = getSecondThrow(currentFrame);
             if (isASpare(secondThrow)){
                 return 10;
             }
         } else {
-            return 10;
+            if (currentFrame.length()==2) {
+                return 10 + Integer.valueOf(getSecondThrow(currentFrame));
+            }
+
+            return 10 ;//+ firstThrowOfNextFrame(frames, frameNumber);
         }
 
         return sumOfTwoThrows(firstThrow, secondThrow);
@@ -72,10 +76,10 @@ public class BowlingResults {
     }
 
     private static String getFirstThrow(String frame) {
-        return String.valueOf(frame.charAt(0));
+        return String.valueOf(frame.charAt(0)).replace("X", "10");
     }
     private static String getSecondThrow(String frame) {
-        return String.valueOf(frame.charAt(1));
+        return String.valueOf(frame.charAt(1)).replace("X", "10");
     }
     private static String replaceSpareWithTen(String frame){
         return getSecondThrow(frame).replace("/","10");
