@@ -3,46 +3,16 @@
 // https://junit.org/junit5/
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class BowlingResultsTest {
-
-    @Test
-    void full_strike_series_score_is_300() {
-        int expected = 300;
-        int actual = BowlingResults.answer("X|X|X|X|X|X|X|X|X|X||XX");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void full_nine_series_score_is_90() {
-        int expected = 90;
-        int actual = BowlingResults.answer("9-|9-|9-|9-|9-|9-|9-|9-|9-|9-||");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void full_five_plus_spare_series_score_is_150() {
-        int expected = 150;
-        int actual = BowlingResults.answer("5/|5/|5/|5/|5/|5/|5/|5/|5/|5/||5");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void twoframes_with_strike_and_7_is_24() {
-        int expected = 24;
-        int actual = BowlingResults.answer("X|-7|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void scoring_is_frame_number_results_in_55() {
-        int expected = 55;
-        int actual = BowlingResults.answer("1-|2-|3-|4-|5-|6-|7-|8-|9-|X||--");
-        assertEquals(expected, actual);
-    }
-
     @Test
     void all_misses_results_in_0() {
         int expected = 0;
@@ -50,52 +20,82 @@ public class BowlingResultsTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void frameOne_is_spare_frameTwo_has_value_five_result_is_20() {
-        int expected = 20;
-        int actual = BowlingResults.answer("5/|5-|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
+    public static Stream<Arguments> numbersOnlyExamples(){
+        return Stream.of(
+                Arguments.of("52|--|--|--|--|--|--|--|--|--||", 7)
+                ,Arguments.of("12|12|--|--|--|--|--|--|--|--||", 6)
+                ,Arguments.of("--|12|12|--|--|--|--|--|--|--||", 6)
+                ,Arguments.of("9-|9-|9-|9-|9-|9-|9-|9-|9-|9-||", 90)
+        );
     }
 
-    @Test
-    void oneframe_five_two_followed_by_all_misses_is_7() {
-        int expected = 7;
-        int actual = BowlingResults.answer("52|--|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
+    public static Stream<Arguments> spareExamples(){
+        return Stream.of(
+                Arguments.of("-/|--|--|--|--|--|--|--|--|--||", 10)
+                ,Arguments.of("5/|5-|--|--|--|--|--|--|--|--||", 20)
+                ,Arguments.of("5/|-3|--|--|--|--|--|--|--|--||", 13)
+                ,Arguments.of("5/|5/|5/|5/|5/|5/|5/|5/|5/|5/||5", 150)
+
+        );
     }
 
-    @Test
-    void firstframe_one_two_secondframe_one_two_followed_by_all_misses_is_6() {
-        int expected = 6;
-        int actual = BowlingResults.answer("12|12|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
+    public static Stream<Arguments> strikeExamples(){
+        return Stream.of(
+                Arguments.of("X|--|--|--|--|--|--|--|--|--||", 10)
+                ,Arguments.of("X|3-|--|--|--|--|--|--|--|--||", 16)
+                ,Arguments.of("X|-7|--|--|--|--|--|--|--|--||", 24)
+                ,Arguments.of("X|X|X|X|X|X|X|X|X|X||XX", 300)
+                ,Arguments.of("1-|2-|3-|4-|5-|6-|7-|8-|9-|X||--",55)
+        );
     }
 
-    @Test
-    void one_spare_all_misses_is_10() {
-        int expected = 10;
-        int actual = BowlingResults.answer("-/|--|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
-    }
-    @Test
-    void frameOne_is_spare_frameTwo_has_value_three_result_is_16() {
-        int expected = 16;
-        int actual = BowlingResults.answer("5/|3-|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
+    public static Stream<Arguments> mixedExamples() {
+        return Stream.of(
+                Arguments.of("12|3/|X|--|--|--|--|--|--|--||", 33)
+               ,Arguments.of("12|X|3/|--|--|--|--|--|--|--||", 33)
+        );
     }
 
-    @Test
-    void one_strike_all_misses_is_10() {
-        int expected = 10;
-        int actual = BowlingResults.answer("X|--|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
+    public static Stream<Arguments> invalidExamples() {
+        return Stream.of(
+                Arguments.of("9-|9-|9-|9-|9-|9-|9-|9-|9-|9-||9-", 90)
+                //todo: handle this invalid input               ,Arguments.of("", -1)
+                //todo: handle not enough frames
+                //todo: handle to many frames
+                //todo:  not ending with ||
+                //todo: last frame strike, but no bonus results
+                //todo: last frame spare, but no bonus result
+        );
     }
-    @Test
-    @Disabled( "need refactoring first")
-    void one_strike_frameTwo_has_value_three_followed_by_all_misses_is_16() {
-        int expected = 16;
-        int actual = BowlingResults.answer("X|3-|--|--|--|--|--|--|--|--||");
-        assertEquals(expected, actual);
+
+    @ParameterizedTest
+    @MethodSource("numbersOnlyExamples")
+    void numbersOnlySeries(String formattedInput, int expectedTotalScore) {
+        assertEquals(expectedTotalScore, BowlingResults.answer(formattedInput));
+    }
+
+    @ParameterizedTest
+    @MethodSource("spareExamples")
+    void spareSeries(String formattedInput, int expectedTotalScore) {
+        assertEquals(expectedTotalScore, BowlingResults.answer(formattedInput));
+    }
+
+    @ParameterizedTest
+    @MethodSource("strikeExamples")
+    void strikeSeries(String formattedInput, int expectedTotalScore) {
+        assertEquals(expectedTotalScore, BowlingResults.answer(formattedInput));
+    }
+
+    @ParameterizedTest
+    @MethodSource("mixedExamples")
+    void mixedSeries(String formattedInput, int expectedTotalScore) {
+        assertEquals(expectedTotalScore, BowlingResults.answer(formattedInput));
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidExamples")
+    void invalidSeries(String formattedInput, int expectedTotalScore) {
+        assertEquals(expectedTotalScore, BowlingResults.answer(formattedInput));
     }
 
 }
